@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Confirmation de suppression</title>{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Confirmer la suppression</h2>
+    <p>Êtes-vous sûr de vouloir supprimer le point de vente "{{ point_de_vent }}" ?</p>
+    <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Supprimer">
+    </form>
+    <a href="{% url 'pointdevent_list' %}" class="btn btn-secondary">Annuler</a>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{% if point_de_vent.pk %}Modifier{% else %}Nouveau{% endif %} Point de Vente</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% if point_de_vent.pk %}Modifier{% else %}Nouveau{% endif %} Point de Vente</h2>
+    <form method="post" {% if point_de_vent.pk %}action="{% url 'pointdevent_update' point_de_vent.pk %}"{% else %}action="{% url 'pointdevent_create' %}"{% endif %}>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% if point_de_vent.pk %}Enregistrer les modifications{% else %}Créer Point de Vente{% endif %}</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Liste des Panier</h2>
+    <a href="{% url 'panier_create' %}" class="btn btn-success mb-3">Nouveau Panier</a>
+    <table class="table table-success">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Label</th>
+                <th scope="col">Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for panier in panier_list %}
+            <tr>
+                <td>{{ panier.id }}</td>
+                <td>{{ panier.label }}</td>
+                <td>{{ panier.code }}</td>
+                <td>{{ panier.description }}</td>
+                <td>
+                    <a href="{% url 'panier_detail' panier.pk %}" class="btn btn-info btn-sm">Détail</a>
+                    <a href="{% url 'panier_update' panier.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'panier_delete' panier.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce PanierProduit ?')">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

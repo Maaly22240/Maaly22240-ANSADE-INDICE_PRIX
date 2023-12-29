@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Delete Panier</h2>
+    <p>Are you sure you want to delete this Panier?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
+        <a href="{% url 'panier_list' %}" class="btn btn-secondary">No, cancel</a>
+    </form>
+</div>
+{% endblock %}

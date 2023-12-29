@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Détail du Point de Vente</title>{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Détail du Point de Vente</h2>
+    <p><strong>Zone de Vente:</strong> {{ point_de_vent.zone_de_vente }}</p>
+    <p><strong>Coordonnées GPS:</strong> {{ point_de_vent.coordonnees_gps }}</p>
+    <a href="{% url 'pointdevent_list' %}" class="btn btn-secondary">Retour à la liste</a>
+</div>
+{% endblock %}

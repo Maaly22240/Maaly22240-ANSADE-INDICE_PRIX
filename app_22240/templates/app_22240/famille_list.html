@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Liste des Familles</h2>
+    <a href="{% url 'famille_create' %}" class="btn btn-success mb-3">Nouveau Famille</a>
+    <table class="table table-success">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">label</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for family in famille_list %}
+            <tr>
+                <td>{{ family.id }}</td>
+                <td>{{ family.nom }}</td>
+                <td>
+                    <a href="{% url 'famille_detail' family.pk %}" class="btn btn-info btn-sm">Détail</a>
+                    <a href="{% url 'famille_update' family.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'famille_delete' family.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette Famille ?')">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

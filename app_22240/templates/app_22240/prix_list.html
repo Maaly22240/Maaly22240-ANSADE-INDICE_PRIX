@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Liste des Prix</title>{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Liste des Prix</h2>
+    <a href="{% url 'prix_create' %}" class="btn btn-success mb-3">Nouveau Prix</a>
+    <table class="table table-success">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Code</th>
+                <th scope="col">Valeur</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prix in prix_list %}
+            <tr>           
+                <td>{{ prix.id }}</td>
+                <td>{{ prix.code }}</td>
+                <td>{{ prix.valeur }}</td>
+                <td>{{ prix.date }}</td>
+                <td>
+                    <a href="{% url 'prix_detail' prix.pk %}" class="btn btn-info btn-sm">Détail</a>
+                    <a href="{% url 'prix_update' prix.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'prix_delete' prix.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prix ?')">Supprimer</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

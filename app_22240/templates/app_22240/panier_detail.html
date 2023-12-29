@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Panier Detail</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Label:</dt>
+        <dd class="col-sm-9">{{ panier.label }}</dd>
+
+        <dt class="col-sm-3">Code:</dt>
+        <dd class="col-sm-9">{{ panier.code }}</dd>
+
+        <dt class="col-sm-3">Description:</dt>
+        <dd class="col-sm-9">{{ panier.description }}</dd>
+    </dl>
+    <a href="{% url 'panier_list' %}" class="btn btn-secondary">Back to Panier List</a>
+</div>
+{% endblock %}
