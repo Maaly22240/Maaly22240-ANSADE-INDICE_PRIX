@@ -1,3 +1,5 @@
+
+{% extends 'base.html' %}
 {% block title %}Home - My Site{% endblock %}
 
 {% load static %}  <!-- Ajout de la directive load static -->
@@ -7,7 +9,13 @@
 <p>
     <h1 style="color: rgb(255, 98, 0);">Bienvenue sur notre site</h1>
     <h4 style="color: rgb(255, 0, 200);">Calcul de l'Indice National des Prix de la Consommation (INPC)</h4>
-  </p>
-  <!-- Ajoutez un lien vers la nouvelle page -->
-  <a href="{% url 'famille_list' %}" class="btn btn-success">Entrer dans le projet</a>
+    <a href="{% url 'famille_list' %}" class="btn btn-success mb-3">Entrer dans le projet</a>
+</p>
+<p><img src="{% static 'face.jpg' %}" alt="" width="50" height="60" class="auto-height">
+   ,</p>
+
+   <p> <a href="https://web.facebook.com/ansade.rim" target="_blank">https://web.facebook.com/ansade.rim</a></p>
 {% endblock %}
+<!-- blog/templates/blog/article_detail.html -->
+
+https://ansade.mr/fr/bulletin-trimestriel-de-conjoncture-t3-2022/#

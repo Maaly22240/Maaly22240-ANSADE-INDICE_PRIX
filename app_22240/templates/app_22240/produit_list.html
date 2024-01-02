@@ -21,7 +21,7 @@
                     <td>{{ produit.id }}</td>
                     <td>{{ produit.label }}</td>
                     <td>{{ produit.price_unit }}</td>
-                    <td>{{ produit.famille_produit.nom }}</td>
+                    <td>{{ produit.famille_produit }}</td>
                     <td>{{ produit.code }}</td>
                     <td>
                         <a href="{% url 'produit_update' produit.pk %}" class="btn btn-warning btn-sm">Edit</a>
