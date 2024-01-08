@@ -4,6 +4,10 @@
 <div class="container mt-5">
     <h2>Liste des Points de Vent</h2>
     <a href="{% url 'pointdevent_create' %}" class="btn btn-success mb-3">Nouveau Point de Vent</a>
+    <div class="mb-3">
+        <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary">Export Familles</a>
+        <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger">Import Familles</a>
+      </div>
     <table class="table table-success ">
         <thead class="thead-dark">
             <tr>

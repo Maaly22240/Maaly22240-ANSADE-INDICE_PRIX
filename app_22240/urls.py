@@ -45,7 +45,11 @@ urlpatterns = [
     path('panierproduits/<int:pk>/', views.PanierProduitDetail.as_view(), name='panierproduit_detail'),
     path('panierproduits/<int:pk>/edit/', views.PanierProduitUpdate.as_view(), name='panierproduit_update'),
     path('panierproduits/<int:pk>/delete/', views.PanierProduitDelete.as_view(), name='panierproduit_delete'),
+
+    path('export/<str:model_name>/', ExportView.as_view(), name='export_view'),
+    path('import/<str:model_name>/', ImportView.as_view(), name='import_view'),
 ]
+
 
 
 

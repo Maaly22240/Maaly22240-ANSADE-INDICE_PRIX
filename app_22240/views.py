@@ -33,6 +33,8 @@ class FamilleUpdate(UpdateView):
     fields = '__all__'
     success_url = reverse_lazy('famille_list')
 
+
+
 ################################Produit
 class ProduitList(ListView):
     model = Produit
@@ -137,3 +139,59 @@ class PanierProduitUpdate(UpdateView):
     model =  PanierProduit
     fields = '__all__'
     success_url = reverse_lazy('panierproduit_list')
+
+#################################################
+    
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.views import View
+from django.contrib import messages
+
+from .resources import FamilleResource, PrixResource, ProduitResource, PointDeVentResource, PanierResource, PanierProduitResource
+
+class ExportView(View):
+    def get(self, request, model_name):
+        resources_map = {
+            'Famille': FamilleResource,
+            'Prix': PrixResource,
+            'Produit': ProduitResource,
+            'PointDeVent': PointDeVentResource,
+            'Panier': PanierResource,
+            'Panierproduit': PanierProduitResource,
+        }
+
+        resource = resources_map.get(model_name)
+        if resource:
+            dataset = resource().export()
+            response = HttpResponse(dataset.csv, content_type='text/csv')
+            response['Content-Disposition'] = f'attachment; filename="{model_name}_export.csv"'
+            return response
+        else:
+            messages.error(request, f"Model '{model_name}' not supported for export.")
+            return render(request, 'error_template.html')
+
+class ImportView(View):
+    template_name = 'import_template.html'
+
+    def get(self, request, model_name):
+        return render(request, self.template_name, {'model_name': model_name})
+
+    def post(self, request, model_name):
+        resources_map = {
+            'Famille': FamilleResource,
+            'Prix': PrixResource,
+            'Produit': ProduitResource,
+            'PointDeVent': PointDeVentResource,
+            'Panier': PanierResource,
+            'Panierproduit': PanierProduitResource,
+        }
+
+        resource = resources_map.get(model_name)
+        if resource:
+            dataset = request.FILES['file'].read().decode('utf-8')
+            resource().import_data(dataset, dry_run=False)
+            messages.success(request, f"Data imported successfully for model '{model_name}'.")
+        else:
+            messages.error(request, f"Model '{model_name}' not supported for import.")
+
+        return render(request, self.template_name, {'model_name': model_name})
