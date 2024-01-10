@@ -47,9 +47,11 @@ urlpatterns = [
     path('panierproduits/<int:pk>/delete/', views.PanierProduitDelete.as_view(), name='panierproduit_delete'),
 
     path('export/<str:model_name>/', ExportView.as_view(), name='export_view'),
-    path('import/<str:model_name>/', ImportView.as_view(), name='import_view'),
-]
+    path('import/<str:model_name>/', ImportView.as_view(), name='import_view'),  
 
+    path('chart', line_chart, name='line_chart'),
+    path('chartJSON', line_chart_json, name='line_chart_json'),
+]
 
 
 

@@ -3,10 +3,10 @@
 {% block content %}
   <div class="container mt-5">
     <h2>Liste des PanierProduits</h2>
-    <a href="{% url 'panierproduit_create' %}" class="btn btn-success mb-3">Nouveau PanierProduit</a>
+    <a href="{% url 'panierproduit_create' %}" class="btn btn-success mb-3"><i class="fas fa-plus"></i>  Nouveau PanierProduit</a>
     <div class="mb-3">
-      <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary">Export Familles</a>
-      <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger">Import Familles</a>
+      <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Export PanierProduit</a>
+      <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger"><i class="fas fa-download"></i>  Import PanierProduit</a>
     </div>
     <table class="table  table-success">
       <thead class="thead-dark">
@@ -26,9 +26,9 @@
             <td>{{ panierproduit.panier.label }}</td>
             <td>{{ panierproduit.ponderation }}</td>
             <td>
-              <a href="{% url 'panierproduit_detail' panierproduit.pk %}" class="btn btn-info btn-sm">Détail</a>
-              <a href="{% url 'panierproduit_update' panierproduit.pk %}" class="btn btn-warning btn-sm">Edit</a>
-              <a href="{% url 'panierproduit_delete' panierproduit.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce PanierProduit ?')">Supprimer</a>
+              <a href="{% url 'panierproduit_detail' panierproduit.pk %}" class="btn btn-info btn-sm"><i class="fas fa-layer-group"></i> Détail</a>
+              <a href="{% url 'panierproduit_update' panierproduit.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-tag"></i> Modifier</a>
+              <a href="{% url 'panierproduit_delete' panierproduit.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce PanierProduit ?')"><i class="fas fa-shopping-basket"></i> Supprimer</a>
             </td>
           </tr>
         {% endfor %}

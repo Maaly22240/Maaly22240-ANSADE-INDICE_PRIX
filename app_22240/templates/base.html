@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,36 +8,43 @@
     <!-- Add your CSS links or stylesheets here -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 <body>
 
     <!-- Navbar -->
-    <nav  class="navbar navbar-expand-lg navbar-collapse btn-warning">
-        <a class="navbar-collapse" href="#">Indice de prix</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg navbar-collapse btn-warning">
+        <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> Indice de prix</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'famille_list' %}">Familles des Produits</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'famille_list' %}"><i class="fas fa-layer-group"></i> Familles des
+                        Produits</a>
                 </li>
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'produit_list' %}">Produits</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'produit_list' %}"><i class="fas fa-cube"></i> Produits</a>
                 </li>
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'panier_list' %}">Panier</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'panier_list' %}"><i class="fas fa-shopping-basket"></i> Panier</a>
                 </li>
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'prix_list' %}">Prix</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'prix_list' %}"><i class="fas fa-tag"></i> Prix</a>
                 </li>
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'pointdevent_list' %}">Points de Vent</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pointdevent_list' %}"><i class="fas fa-map-marker-alt"></i> Points
+                        de Vent</a>
                 </li>
-                <li class="nav-link">
-                    <a class="nav-link" href="{% url 'panierproduit_list' %}">Panier Produit</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'panierproduit_list' %}"><i class="fas fa-shopping-cart"></i> Panier
+                        Produit</a>
                 </li>
-                
+
                 <!-- Ajouter d'autres liens pour les nouvelles fonctionnalités ici -->
             </ul>
         </div>

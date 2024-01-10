@@ -3,10 +3,10 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Liste des Produits</h2>
-    <a href="{% url 'produit_create' %}" class="btn btn-success mb-3">Nouveau Produit</a>
+    <a href="{% url 'produit_create' %}" class="btn btn-success mb-3"><i class="fas fa-plus"></i> Nouveau Produit</a>
     <div class="mb-3">
-        <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary">Export Familles</a>
-        <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger">Import Familles</a>
+        <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary"><i class="fas fa-upload"></i>Export Produit</a>
+        <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger"><i class="fas fa-download"></i> Import Produit</a>
       </div>
     <table class="table table-success">
         <thead class="thead-dark">
@@ -28,9 +28,9 @@
                     <td>{{ produit.famille_produit }}</td>
                     <td>{{ produit.code }}</td>
                     <td>
-                        <a href="{% url 'produit_update' produit.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="{% url 'produit_detail' produit.pk %}" class="btn btn-info btn-sm">Detail</a>
-                        <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{% url 'produit_update' produit.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-tag"></i> Edit</a>
+                        <a href="{% url 'produit_detail' produit.pk %}" class="btn btn-info btn-sm"><i class="fas fa-layer-group"></i> Detail</a>
+                        <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-danger btn-sm"> <i class="fas fa-shopping-basket"></i> Delete</a>
                     </td>
                 </tr>
             {% endfor %}

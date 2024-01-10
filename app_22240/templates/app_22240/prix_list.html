@@ -5,18 +5,19 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Liste des Prix</h2>
-    <a href="{% url 'prix_create' %}" class="btn btn-success mb-3">Nouveau Prix</a>
+    <a href="{% url 'prix_create' %}" class="btn btn-success mb-3"><i class="fas fa-plus"></i> Nouveau Prix</a>
     <div class="mb-3">
-        <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary">Export Familles</a>
-        <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger">Import Familles</a>
+        <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Export Prix</a>
+        <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger"><i class="fas fa-download"></i> Import Prix</a>
       </div>
     <table class="table table-success">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Code</th>
                 <th scope="col">Valeur</th>
                 <th scope="col">Date</th>
+                <th scope="col">point_id</th>
+                <th scope="col">produit_id</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -24,13 +25,15 @@
             {% for prix in prix_list %}
             <tr>           
                 <td>{{ prix.id }}</td>
-                <td>{{ prix.code }}</td>
                 <td>{{ prix.valeur }}</td>
                 <td>{{ prix.date }}</td>
+                <td>{{ prix.pointdevent_id }}</td>
+                <td>{{ prix.produit_id }}</td>
+
                 <td>
-                    <a href="{% url 'prix_detail' prix.pk %}" class="btn btn-info btn-sm">Détail</a>
-                    <a href="{% url 'prix_update' prix.pk %}" class="btn btn-warning btn-sm">Modifier</a>
-                    <a href="{% url 'prix_delete' prix.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prix ?')">Supprimer</a>
+                    <a href="{% url 'prix_detail' prix.pk %}" class="btn btn-info btn-sm"><i class="fas fa-layer-group"></i> Détail</a>
+                    <a href="{% url 'prix_update' prix.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-tag"></i> Modifier</a>
+                    <a href="{% url 'prix_delete' prix.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prix ?')"><i class="fas fa-shopping-basket"></i> Supprimer</a>
                 </td>
             </tr>
             {% endfor %}
