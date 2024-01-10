@@ -25,6 +25,7 @@ class PointDeVent(models.Model):
         return f"Point de Vent {self.code}"
 
 
+
 class Prix(models.Model):
     valeur = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()

@@ -6,6 +6,9 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <label for="id_date">Date:</label>
+         <input type="date" id="id_date" name="date">
+    
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     </form>
 </div>

@@ -3,6 +3,14 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from .models import *
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from tablib import Dataset
+from django.http import HttpResponse
+from django.urls import reverse
+from django.shortcuts import redirect
+from import_export.formats import base_formats
+from django.contrib import messages
+from .resources import *  # Import your resource class
+
 #########################home
 def home(request):
     mymsg = request.GET.get('message')
@@ -77,6 +85,33 @@ class PanierUpdate(UpdateView):
     model =  Panier
     fields = '__all__'
     success_url = reverse_lazy('panier_list')
+
+
+def import_panier(request):
+    if request.method == 'POST':
+        pranier_resource = PanierResource()
+        dataset = Dataset()
+        new_panier = request.FILES.get('myfile')
+
+        if not new_panier.name.endswith('.csv'):
+            messages.info(request, 'File is not CSV type')
+            return render(request, 'import.html')
+
+        imported_data = dataset.load(new_panier.read().decode('utf-8'))
+        result = pranier_resource.import_data(dataset, dry_run=True)  # Check if the data is valid
+
+        if not result.has_errors():
+            pranier_resource.import_data(dataset, dry_run=False)  # Perform the actual import
+            messages.success(request, 'Import successful')
+
+            # Replace 'your_custom_view' with the actual view name or URL path
+            return redirect(reverse('panier_list'))
+        else:
+            messages.error(request, 'There was an error importing the data')
+
+    return render(request, 'import.html')
+
+
 ################################prix
 class PrixList(ListView):
     model = Prix
@@ -97,6 +132,57 @@ class PrixUpdate(UpdateView):
     model =  Prix
     fields = '__all__'
     success_url = reverse_lazy('prix_list')
+from django.http import HttpResponse
+from import_export.formats import base_formats
+from .resources import *
+from django.views import View
+
+class ExportView(View):
+    def get(self, request, model_name):
+        resources_map = {
+            'famille': FamilleResource,
+            'prix': PrixResource,
+            'produit': ProduitResource,
+            'pointdevent': PointDeVentResource,
+            'panier': PanierResource,
+            'panierproduit': PanierProduitResource,
+        }
+
+        resource = resources_map.get(model_name)
+        if resource:
+            dataset = resource().export()
+            response = HttpResponse(dataset.csv, content_type='text/csv')
+            response['Content-Disposition'] = f'attachment; filename="{model_name}_export.csv"'
+            return response
+        else:
+            messages.error(request, f"Model '{model_name}' not supported for export.")
+            return render(request, 'error_template.html')
+
+
+def import_produit(request):
+    if request.method == 'POST':
+        produit_resource = ProduitResource()
+        dataset = Dataset()
+        new_produits = request.FILES.get('myfile')
+
+        if not new_produits.name.endswith('.csv'):
+            messages.info(request, 'File is not CSV type')
+            return render(request, 'import.html')
+
+        imported_data = dataset.load(new_produits.read().decode('utf-8'))
+        result = produit_resource.import_data(dataset, dry_run=True)  # Check if the data is valid
+
+        if not result.has_errors():
+            produit_resource.import_data(dataset, dry_run=False)  # Perform the actual import
+            messages.success(request, 'Import successful')
+
+            # Replace 'your_custom_view' with the actual view name or URL path
+            return redirect(reverse('produit_list'))
+        else:
+            messages.error(request, 'There was an error importing the data')
+
+    return render(request, 'import.html')
+
 
 ################################poindevent
 class PointDeVentList(ListView):
@@ -142,59 +228,6 @@ class PanierProduitUpdate(UpdateView):
 
 #################################################
     
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views import View
-from django.contrib import messages
-
-from .resources import FamilleResource, PrixResource, ProduitResource, PointDeVentResource, PanierResource, PanierProduitResource
-
-class ExportView(View):
-    def get(self, request, model_name):
-        resources_map = {
-            'Famille': FamilleResource,
-            'Prix': PrixResource,
-            'Produit': ProduitResource,
-            'PointDeVent': PointDeVentResource,
-            'Panier': PanierResource,
-            'Panierproduit': PanierProduitResource,
-        }
-
-        resource = resources_map.get(model_name)
-        if resource:
-            dataset = resource().export()
-            response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = f'attachment; filename="{model_name}_export.csv"'
-            return response
-        else:
-            messages.error(request, f"Model '{model_name}' not supported for export.")
-            return render(request, 'error_template.html')
-
-class ImportView(View):
-    template_name = 'import.html'
-
-    def get(self, request, model_name):
-        return render(request, self.template_name, {'model_name': model_name})
-
-    def post(self, request, model_name):
-        resources_map = {
-            'Famille': FamilleResource,
-            'Prix': PrixResource,
-            'Produit': ProduitResource,
-            'PointDeVent': PointDeVentResource,
-            'Panier': PanierResource,
-            'Panierproduit': PanierProduitResource,
-        }
-
-        resource = resources_map.get(model_name)
-        if resource:
-            dataset = request.FILES['file'].read().decode('utf-8')
-            resource().import_data(dataset, dry_run=False)
-            messages.success(request, f"Data imported successfully for model '{model_name}'.")
-        else:
-            messages.error(request, f"Model '{model_name}' not supported for import.")
-
-        return render(request, self.template_name, {'model_name': model_name})
 
 
 from django.views.generic import TemplateView
@@ -208,7 +241,7 @@ class LineChartJSONView(BaseLineChartView):
 
     def get_providers(self):
         """Retourne les noms des ensembles de données."""
-        return ["Prix"]
+        return ["Lait"]
 
     def get_data(self):
         """Retourne le jeu de données à tracer."""

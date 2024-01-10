@@ -5,9 +5,10 @@
     <h2>Liste des PanierProduits</h2>
     <a href="{% url 'panierproduit_create' %}" class="btn btn-success mb-3"><i class="fas fa-plus"></i>  Nouveau PanierProduit</a>
     <div class="mb-3">
-      <a href="{% url 'export_view' model_name='famille' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Export PanierProduit</a>
-      <a href="{% url 'import_view' model_name='famille' %}" class="btn btn-danger"><i class="fas fa-download"></i>  Import PanierProduit</a>
-    </div>
+      <a  href="{% url 'export_view' model_name='panierproduit' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Export panierproduit</a>
+      <a href="{% url 'import_produit' %}" class="btn btn-danger"><i class="fas fa-download"></i> Import PanierProduit</a>
+  </div>
+  
     <table class="table  table-success">
       <thead class="thead-dark">
         <tr>
