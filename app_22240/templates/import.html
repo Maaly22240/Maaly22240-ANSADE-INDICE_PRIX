@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Import </title>
-</head>
-<body>
+<!-- templates/import.html -->
 
-<h2>Import </h2>
+{% extends "base.html" %}
 
-<form method="post" enctype="multipart/form-data" class="d-inline">
+{% block content %}
+  <h1>Import Data</h1>
+  
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <label for="myfile">Choose a file to import:</label>
-    <input type="file" name="myfile" accept=".csv, .xlsx">
-    <br>
-    <button type="submit">Import</button>
-</form>
-
-</body>
-</html>
+    
+    <div class="mb-3">
+      <label for="myfile" class="form-label">Choose CSV file:</label>
+      <input type="file" name="myfile" id="myfile" accept=".csv" class="form-control">
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Import</button>
+  </form>
+  
+{% endblock %}

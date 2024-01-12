@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Indice de prix{% endblock %}</title>
+    <title>{% block title %}Indice de prix 22240{% endblock %}</title>
     <!-- Add your CSS links or stylesheets here -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -16,7 +16,7 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-collapse btn-warning">
-        <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> Indice de prix</a>
+        <a class="navbar-brand" href="#"><i class="fas fa-chart-line"></i> Indice de prix 22240</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,25 +24,28 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'famille_list' %}"><i class="fas fa-layer-group"></i> Familles des
+                    <a class="nav-link" href="{% url 'famille_list' %}"><i class="fas fa-cube"></i> Familles des
                         Produits</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'produit_list' %}"><i class="fas fa-cube"></i> Produits</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'panier_list' %}"><i class="fas fa-shopping-basket"></i> Panier</a>
+                    <a class="nav-link" href="{% url 'panier_list' %}"><i class="fas fa-cube"></i> Panier</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'prix_list' %}"><i class="fas fa-tag"></i> Prix</a>
+                    <a class="nav-link" href="{% url 'prix_list' %}"><i class="fas fa-cube"></i> Prix</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pointdevent_list' %}"><i class="fas fa-map-marker-alt"></i> Points
+                    <a class="nav-link" href="{% url 'pointdevent_list' %}"><i class="fas fa-cube"></i> Points
                         de Vent</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'panierproduit_list' %}"><i class="fas fa-shopping-cart"></i> Panier
+                    <a class="nav-link" href="{% url 'panierproduit_list' %}"><i class="fas fa-cube"></i> Panier
                         Produit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calcul_moyenne_ponderee' %}"><i class="fas fa-layer-group"></i>Resultats </a>
                 </li>
 
                 <!-- Ajouter d'autres liens pour les nouvelles fonctionnalités ici -->

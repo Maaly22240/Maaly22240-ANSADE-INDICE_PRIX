@@ -50,9 +50,16 @@ urlpatterns = [
 
     path('import_produit/', import_produit, name='import_produit'),
     path('import_panier/', import_panier, name='import_panier'),
+    path('import_prix/', import_prix, name='import_prix'),
+    path('import_famille/', import_famille, name='import_famille'),
+    path('import_pointdevent/', import_pointdevent, name='import_pointdevent'),
+    path('import_panierproduit/', import_panierproduit, name='import_panierproduit'),
 
     path('chart', line_chart, name='line_chart'),
     path('chartJSON', line_chart_json, name='line_chart_json'),
+
+    path('calcul_moyenne_ponderee/', CalculMoyennePonderéeView.as_view(), name='calcul_moyenne_ponderee'),
+
 ]
 
 

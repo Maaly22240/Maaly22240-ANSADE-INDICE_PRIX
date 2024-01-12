@@ -1,0 +1,43 @@
+<!-- templates/calcul_moyenne_ponderee.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultats du calcul de moyenne pondérée</title>
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1 style = "color: #270f9edc; text-align:center;">Résultats du calcul de moyenne pondérée</h1>
+    <table style = "color: #d42525; text-align:center;">
+        <thead>
+            <tr>
+                <th>Produit ID</th>
+                <th>Moyenne pondérée</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit_id, moyenne_ponderee in resultats.items %}
+                <tr>
+                    <td>{{ produit_id }}</td>
+                    <td>{{ moyenne_ponderee }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
