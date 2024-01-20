@@ -5,8 +5,13 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Détail du Point de Vente</h2>
-    <p><strong>Zone de Vente:</strong> {{ point_de_vent.zone_de_vente }}</p>
-    <p><strong>Coordonnées GPS:</strong> {{ point_de_vent.coordonnees_gps }}</p>
+    <p><strong>Code:</strong> {{ pointdevent.code }}</p>
+    <p><strong>wilaya:</strong> {{ pointdevent.wilaya }}</p>
+    <p><strong>moughataa GPS:</strong> {{ pointdevent.moughataa }}</p>
+    <p><strong>commune GPS:</strong> {{ pointdevent.commune }}</p>
+    <p><strong>gps_lat :</strong> {{ pointdevent.gps_lat }}</p>
+    <p><strong>gps_long:</strong> {{ pointdevent.gps_long }}</p>
+
     <a href="{% url 'pointdevent_list' %}" class="btn btn-secondary">Retour à la liste</a>
 </div>
 {% endblock %}

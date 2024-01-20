@@ -53,3 +53,4 @@ class PanierProduit(models.Model):
 
     def __str__(self):
         return f"PanierProduit {self.id}"
+

@@ -77,8 +77,7 @@ class ProduitList(ListView):
 
 class ProduitDetail(DetailView):
     model = Produit  
-    template_name = 'produit_detail.html'
-    context_object_name = 'produit'
+    
 class ProduitCreate(CreateView):
     model = Produit
     fields = '__all__'
@@ -403,11 +402,31 @@ class PriceEvolutionChartView(View):
         return render(request, self.template_name, context)
 ##########################calcul d'INPC
 
+# views.py
+
+from django.shortcuts import render
+from django.views import View
+from django.db.models import Avg
+from decimal import Decimal
+from .models import Produit, Prix, PanierProduit
+
 class CalculMoyennePonderéeView(View):
     template_name = 'calcul_moyenne_ponderee.html'
 
-    def get_queryset(self):
-        panier_produits = PanierProduit.objects.all()
+    def get_inpc(self, month, year, produit_id):
+        prix_moyen = Prix.objects.filter(date__month=month, date__year=year, produit_id=produit_id).aggregate(Avg('valeur'))['valeur__avg']
+        
+        if prix_moyen is not None:
+            inpc = Decimal(str(prix_moyen)) * Decimal('1.1')
+        else:
+            inpc = None
+
+        return inpc
+
+    def get_queryset(self, month, year, produit_id):
+        prix_filtres = Prix.objects.filter(date__month=month, date__year=year, produit_id=produit_id)
+
+        panier_produits = PanierProduit.objects.filter(price__in=prix_filtres)
 
         totals_produits = {}
 
@@ -436,8 +455,20 @@ class CalculMoyennePonderéeView(View):
         return Produit.objects.all()
 
     def get(self, request, *args, **kwargs):
-        resultats = {produit.label: produit.moyenne_ponderee for produit in self.get_queryset()}
+        month = request.GET.get('month')
+        year = request.GET.get('year')
+        produit_id = request.GET.get('produit')
 
-        context = {'resultats': resultats}
+        if month and year and produit_id:
+            inpc = self.get_inpc(month, year, produit_id)
+            resultats = {produit.label: produit.moyenne_ponderee for produit in self.get_queryset(month, year, produit_id)}
+            produit_selectionne = Produit.objects.get(id=produit_id)
+        else:
+            inpc = None
+            resultats = None
+            produit_selectionne = None
+
+        produits = Produit.objects.all()
+
+        context = {'resultats': resultats, 'inpc': inpc, 'produit_selectionne': produit_selectionne, 'produits': produits}
         return render(request, self.template_name, context)
-

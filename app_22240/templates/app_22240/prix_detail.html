@@ -5,9 +5,11 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Détail du Prix</h2>
-    <p><strong>Code:</strong> {{ prix.code }}</p>
     <p><strong>Valeur:</strong> {{ prix.valeur }}</p>
     <p><strong>Date:</strong> {{ prix.date }}</p>
+    <p><strong>pointdevent_id:</strong> {{ prix.pointdevent_id }}</p>
+    <p><strong>produit_id:</strong> {{ prix.produit_id }}</p>
+
     <a href="{% url 'prix_list' %}" class="btn btn-secondary">Retour à la liste</a>
 </div>
 {% endblock %}

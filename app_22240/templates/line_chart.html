@@ -3,7 +3,7 @@
 {% block title %}<title>Evolution des Prix pour {{ product }}</title>{% endblock %}
 
 {% block content %}
-    <h1 style="background-color:hwb(134 8% 26%);  color: hsla(0, 83%, 34%, 0.863); text-align:center;">Evolution des Prix pour {{ product }}</h1>
+    <h1 style="background-color:hwb(134 8% 26%); color: hsla(0, 83%, 34%, 0.863); text-align:center;">Evolution des Prix pour {{ product }}</h1>
     
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -24,16 +24,34 @@
                 datasets: [{
                     label: '{{ product }}',
                     data: values,
-                    borderColor: 'rgb(255, 99, 132)',  // Use a different color (red in this case)
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Adjust opacity if needed
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Background color of the dataset
                     borderWidth: 2,
                     pointRadius: 5,
                     pointHoverRadius: 8,
-                    tension: 0.4  // Adjust the tension to control the curve shape
+                    tension: 0.4
                 }]
             },
             options: {
                 // Your chart configuration options here
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            unit: 'month',
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date',
+                        },
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Prix',
+                        },
+                    }],
+                },
             }
         });
     </script>

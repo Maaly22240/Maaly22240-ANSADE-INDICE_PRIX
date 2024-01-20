@@ -57,7 +57,7 @@ urlpatterns = [
 
     path('line_chart/<int:produit_id>/', PriceEvolutionChartView.as_view(),name='line_chart'),
     
-    path('calcul_moyenne_ponderee/', CalculMoyennePonderéeView.as_view(), name='calcul_moyenne_ponderee'),
+    path('calcul-moyenne-ponderee/', CalculMoyennePonderéeView.as_view(), name='calcul_moyenne_ponderee'),
 
 ]
 
