@@ -3,12 +3,13 @@
 {% block title %}<title>Liste des Prix</title>{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Liste des Prix</h2>
+<div class="container mt-5" >
+    <h2 style="background-color:tomato; text-align: center;">Liste des Prix</h2>
     <a href="{% url 'prix_create' %}" class="btn btn-success mb-3"><i class="fas fa-plus"></i> Nouveau Prix</a>
-    <div class="mb-3">
+    <div class="mb-3" >
         <a  href="{% url 'export_view' model_name='prix' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Export prix</a>
         <a href="{% url 'import_prix' %}" class="btn btn-danger"><i class="fas fa-download"></i> Import Prix</a>
+
     </div>
     
     <table class="table table-success">
@@ -28,7 +29,7 @@
                 <td>{{ prix.id }}</td>
                 <td>{{ prix.valeur }}</td>
                 <td>{{ prix.date }}</td>
-                <td>{{ prix.pointdevent_id }}</td>
+                <td>{{ prix.pointdevent_id.moughataa }}</td>
                 <td>{{ prix.produit_id }}</td>
 
                 <td>

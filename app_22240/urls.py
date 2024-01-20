@@ -21,7 +21,7 @@ urlpatterns = [
     path('produits/create/', views.ProduitCreate.as_view(), name='produit_create'),
     path('produits/<int:pk>/update/', views.ProduitUpdate.as_view(), name='produit_update'),
     path('produits/<int:pk>/delete/', views.ProduitDelete.as_view(), name='produit_delete'),
-    
+
     path('panier/', views.PanierList.as_view(), name='panier_list'),
     path('panier/<int:pk>/', views.PanierDetail.as_view(), name='panier_detail'),
     path('panier/create/', views.PanierCreate.as_view(), name='panier_create'),
@@ -55,9 +55,8 @@ urlpatterns = [
     path('import_pointdevent/', import_pointdevent, name='import_pointdevent'),
     path('import_panierproduit/', import_panierproduit, name='import_panierproduit'),
 
-    path('chart', line_chart, name='line_chart'),
-    path('chartJSON', line_chart_json, name='line_chart_json'),
-
+    path('line_chart/<int:produit_id>/', PriceEvolutionChartView.as_view(),name='line_chart'),
+    
     path('calcul_moyenne_ponderee/', CalculMoyennePonderéeView.as_view(), name='calcul_moyenne_ponderee'),
 
 ]

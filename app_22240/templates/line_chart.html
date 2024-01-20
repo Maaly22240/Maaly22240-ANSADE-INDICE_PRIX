@@ -1,25 +1,40 @@
-{% load static %}
-<html>
-    <head>
-        <title>django-chartjs line chart demo</title>
-        <!--[if lte IE 8]>
-            <script src="{% static 'js/excanvas.js' %}"></script>
-        <![endif]-->
-    </head>
-    <body>
-        <h1>Evolution du Prix</h1>
+{% extends "base.html" %}
 
-        <canvas id="myChart" width="500" height="400"></canvas>
+{% block title %}<title>Evolution des Prix pour {{ product }}</title>{% endblock %}
 
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-        <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
-        <script type="text/javascript">
-            $.get('{% url "line_chart_json" %}', function(data) {
-                var ctx = $("#myChart").get(0).getContext("2d");
-                new Chart(ctx, {
-                    type: 'line', data: data
-                });
-            });
-        </script>
-    </body>
-</html>
+{% block content %}
+    <h1 style="background-color:hwb(134 8% 26%);  color: hsla(0, 83%, 34%, 0.863); text-align:center;">Evolution des Prix pour {{ product }}</h1>
+    
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <canvas id="priceChart" width="400" height="200"></canvas>
+    
+    <script>
+        // Retrieve data from Django context
+        var labels = JSON.parse('{{ labels|safe }}');
+        var values = JSON.parse('{{ values|safe }}');
+
+        // Create the chart
+        var ctx = document.getElementById('priceChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '{{ product }}',
+                    data: values,
+                    borderColor: 'rgb(255, 99, 132)',  // Use a different color (red in this case)
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Adjust opacity if needed
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    tension: 0.4  // Adjust the tension to control the curve shape
+                }]
+            },
+            options: {
+                // Your chart configuration options here
+            }
+        });
+    </script>
+{% endblock %}

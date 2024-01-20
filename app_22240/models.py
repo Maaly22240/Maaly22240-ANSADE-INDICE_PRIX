@@ -36,7 +36,7 @@ class Prix(models.Model):
 
     def __str__(self):
         return f"Prix {self.id}"
-
+    
 
 class Panier(models.Model):
     id = models.AutoField(primary_key=True)

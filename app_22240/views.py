@@ -4,19 +4,18 @@ from .models import *
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from tablib import Dataset
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.shortcuts import redirect
 from import_export.formats import base_formats
 from django.contrib import messages
 from import_export import resources
-
+from django.views import View
 
 #########################home
 def home(request):
     mymsg = request.GET.get('message')
     return render(request, 'home.html', {'user_message': mymsg})
-
 def list(request):
     mymsg = request.GET.get('message')
     return render(request, 'home.html', {'user_message': mymsg})
@@ -78,7 +77,8 @@ class ProduitList(ListView):
 
 class ProduitDetail(DetailView):
     model = Produit  
-
+    template_name = 'produit_detail.html'
+    context_object_name = 'produit'
 class ProduitCreate(CreateView):
     model = Produit
     fields = '__all__'
@@ -241,11 +241,11 @@ class ExportView(View):
         if resource:
             dataset = resource().export()
             response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = f'attachment; filename="{model_name}_export.csv"'
+            response['Content-Disposition'] = f'attachment; filename="{model_name}.csv"'
             return response
         else:
             messages.error(request, f"Model '{model_name}' not supported for export.")
-            return render(request, 'error_template.html')
+            return render(request, 'error.html')
 
 
 
@@ -347,58 +347,75 @@ def import_panierproduit(request):
 
     return render(request, 'import.html')
 #################################################
-    
-
-
-from django.views.generic import TemplateView
-from chartjs.views.lines import BaseLineChartView
-from .models import Prix, Produit
-
-class LineChartJSONView(BaseLineChartView):
-    def get_labels(self):
-        """Retourne les étiquettes pour l'axe des x."""
-        return ["January", "February", "March", "April", "May", "June", "July"]
-
-    def get_providers(self):
-        """Retourne les noms des ensembles de données."""
-        return ["Lait"]
-
-    def get_data(self):
-        """Retourne le jeu de données à tracer."""
-        produit_id = 1  # Remplacez cela par l'ID du produit spécifique que vous souhaitez afficher
-
-        prix_data = Prix.objects.filter(produit_id=produit_id).order_by('date')
-        values = [prix.valeur for prix in prix_data]
-        return [values]
-
-line_chart = TemplateView.as_view(template_name='line_chart.html')
-line_chart_json = LineChartJSONView.as_view()
-
-
-
-
-##########################calcul d'INPC
-from django.shortcuts import render
 from django.views import View
-from .models import PanierProduit, Produit
+from django.shortcuts import render, get_object_or_404
+from decimal import Decimal
+import json
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super(DecimalEncoder, self).default(obj)
+
+class PriceEvolutionChartView(View):
+    template_name = 'line_chart.html'
+
+    def get(self, request, produit_id):
+        product = get_object_or_404(Produit, id=produit_id)
+        prices = Prix.objects.filter(produit_id=product).order_by('date')
+
+        labels = []
+        values = []
+        mean_values = []
+
+        current_year = None
+        current_prices = []
+
+        for price in prices:
+            year = price.date.strftime('%Y')
+
+            if current_year is None:
+                current_year = year
+                current_prices.append(price.valeur)
+            elif current_year == year:
+                current_prices.append(price.valeur)
+            else:
+                labels.append(current_year)
+                mean_values.append(sum(current_prices) / len(current_prices))
+
+                # Réinitialisez pour la nouvelle année
+                current_year = year
+                current_prices = [price.valeur]
+
+        # Ajoutez la dernière année après la boucle
+        if current_year is not None:
+            labels.append(current_year)
+            mean_values.append(sum(current_prices) / len(current_prices))
+
+        labels_json = json.dumps(labels,cls=DecimalEncoder)
+        values_json = json.dumps(mean_values,cls=DecimalEncoder)
+        context = {
+            "labels": labels_json,
+            "values": values_json,
+            "product": product
+        }
+
+        return render(request, self.template_name, context)
+##########################calcul d'INPC
 
 class CalculMoyennePonderéeView(View):
     template_name = 'calcul_moyenne_ponderee.html'
 
-    def get(self, request, *args, **kwargs):
-        # Récupérez toutes les instances PanierProduit
+    def get_queryset(self):
         panier_produits = PanierProduit.objects.all()
 
-        # Créez un dictionnaire pour stocker les poids totaux et les sommes pondérées pour chaque produit
         totals_produits = {}
 
-        # Parcourez les instances PanierProduit et calculez les totaux
         for panier_produit in panier_produits:
             produit_id = panier_produit.price.produit_id.id
             ponderation = panier_produit.ponderation
-            prix_valeur = float(panier_produit.price.valeur)  # Convertissez en float
+            prix_valeur = float(panier_produit.price.valeur)
 
-            # Mettez à jour le dictionnaire avec les totaux pour chaque produit
             if produit_id not in totals_produits:
                 totals_produits[produit_id] = {
                     'poids_total': 0,
@@ -406,9 +423,8 @@ class CalculMoyennePonderéeView(View):
                 }
 
             totals_produits[produit_id]['poids_total'] += ponderation
-            totals_produits[produit_id]['somme_ponderee'] += ponderation * prix_valeur  # Utilisez le float
+            totals_produits[produit_id]['somme_ponderee'] += ponderation * prix_valeur
 
-        # Mettez à jour les instances de Produit avec la moyenne calculée
         for produit_id, totals in totals_produits.items():
             poids_total = totals['poids_total']
             somme_ponderee = totals['somme_ponderee']
@@ -417,9 +433,11 @@ class CalculMoyennePonderéeView(View):
             produit.moyenne_ponderee = somme_ponderee / poids_total if poids_total != 0 else 0
             produit.save()
 
-        # Récupérez les résultats si nécessaire
-        resultats = {produit.id: produit.moyenne_ponderee for produit in Produit.objects.all()}
+        return Produit.objects.all()
 
-        # Passez les résultats au template
+    def get(self, request, *args, **kwargs):
+        resultats = {produit.label: produit.moyenne_ponderee for produit in self.get_queryset()}
+
         context = {'resultats': resultats}
         return render(request, self.template_name, context)
+
