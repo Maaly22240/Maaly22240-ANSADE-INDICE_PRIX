@@ -8,7 +8,7 @@ class Produit(models.Model):
     price_unit = models.FloatField(default=0)
     famille_produit = models.ForeignKey(Famille, on_delete=models.CASCADE)
     code = models.CharField(max_length=255,default=0)
-    moyenne_ponderee = models.FloatField(null=True, blank=True)
+    ponderation = models.FloatField(default=0.0)
 
 
     def __str__(self):

@@ -402,73 +402,68 @@ class PriceEvolutionChartView(View):
         return render(request, self.template_name, context)
 ##########################calcul d'INPC
 
-# views.py
-
 from django.shortcuts import render
-from django.views import View
-from django.db.models import Avg
+from .models import Famille, Prix
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
+
 from decimal import Decimal
-from .models import Produit, Prix, PanierProduit
 
-class CalculMoyennePonderéeView(View):
-    template_name = 'calcul_moyenne_ponderee.html'
+def calculer_inpc_par_famille(mois, annee):
+    familles = Famille.objects.all()
+    resultats = []
 
-    def get_inpc(self, month, year, produit_id):
-        prix_moyen = Prix.objects.filter(date__month=month, date__year=year, produit_id=produit_id).aggregate(Avg('valeur'))['valeur__avg']
-        
-        if prix_moyen is not None:
-            inpc = Decimal(str(prix_moyen)) * Decimal('1.1')
-        else:
-            inpc = None
+    for famille in familles:
+        # Calculate the weighted average using the ponderation field
+        total_ponderation = Decimal('0')
+        weighted_sum = Decimal('0')
 
-        return inpc
+        prix_objects = Prix.objects.filter(
+            produit_id__famille_produit=famille,
+            date__month=mois,
+            date__year=annee
+        )
 
-    def get_queryset(self, month, year, produit_id):
-        prix_filtres = Prix.objects.filter(date__month=month, date__year=year, produit_id=produit_id)
+        for prix_obj in prix_objects:
+            # Replace 'produit_id' with the correct field name that references the Produit model
+            ponderation = Decimal(str(prix_obj.produit_id.ponderation))
+            valeur = Decimal(str(prix_obj.valeur))
 
-        panier_produits = PanierProduit.objects.filter(price__in=prix_filtres)
+            total_ponderation += ponderation
+            weighted_sum += ponderation * valeur
 
-        totals_produits = {}
+        inpc = weighted_sum / total_ponderation if total_ponderation != Decimal('0') else Decimal('0')
 
-        for panier_produit in panier_produits:
-            produit_id = panier_produit.price.produit_id.id
-            ponderation = panier_produit.ponderation
-            prix_valeur = float(panier_produit.price.valeur)
+        resultats.append({
+            'date': f"{mois}/{annee}",
+            'famille_produit': famille.nom,
+            'inpc': inpc
+        })
 
-            if produit_id not in totals_produits:
-                totals_produits[produit_id] = {
-                    'poids_total': 0,
-                    'somme_ponderee': 0,
-                }
+    return resultats
 
-            totals_produits[produit_id]['poids_total'] += ponderation
-            totals_produits[produit_id]['somme_ponderee'] += ponderation * prix_valeur
+@require_GET
+def afficher_inpc(request):
+    if 'mois' in request.GET and 'annee' in request.GET:
+        mois_str = request.GET['mois']
+        annee_str = request.GET['annee']
 
-        for produit_id, totals in totals_produits.items():
-            poids_total = totals['poids_total']
-            somme_ponderee = totals['somme_ponderee']
+        # Check if mois and annee are non-empty
+        if mois_str and annee_str:
+            try:
+                mois = int(mois_str)
+                annee = int(annee_str)
+            except ValueError:
+                return HttpResponse("Invalid month or year values")
 
-            produit = Produit.objects.get(id=produit_id)
-            produit.moyenne_ponderee = somme_ponderee / poids_total if poids_total != 0 else 0
-            produit.save()
+            # Calculate INPC based on selected month and year
+            resultats = calculer_inpc_par_famille(mois, annee)
 
-        return Produit.objects.all()
+            # Render the template with the results
+            context = {
+                'resultats': resultats
+            }
+            return render(request, 'inpc.html', context)
 
-    def get(self, request, *args, **kwargs):
-        month = request.GET.get('month')
-        year = request.GET.get('year')
-        produit_id = request.GET.get('produit')
-
-        if month and year and produit_id:
-            inpc = self.get_inpc(month, year, produit_id)
-            resultats = {produit.label: produit.moyenne_ponderee for produit in self.get_queryset(month, year, produit_id)}
-            produit_selectionne = Produit.objects.get(id=produit_id)
-        else:
-            inpc = None
-            resultats = None
-            produit_selectionne = None
-
-        produits = Produit.objects.all()
-
-        context = {'resultats': resultats, 'inpc': inpc, 'produit_selectionne': produit_selectionne, 'produits': produits}
-        return render(request, self.template_name, context)
+    # If the form has not been submitted or mois/annee are empty, render the empty form
+    return render(request, 'inpc.html', {'resultats': []})

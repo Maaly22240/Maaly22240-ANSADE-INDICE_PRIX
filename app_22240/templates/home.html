@@ -1,24 +1,39 @@
 
-{% extends 'base.html' %}
-{% block title %}Home - My Site{% endblock %}
 
-{% load static %}  <!-- Ajout de la directive load static -->
-
+{% load static %}  
+<style> 
+ button {
+            background-color: hsl(143, 100%, 50%);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+button:hover {
+    background-color: #0056b3;
+}</style>
 {% block content %}
 
-<img src="{% static 'drapo.png' %}" alt="" width="300" height="100" class="auto-height" style="margin-right: 150px;">                         
-<img src="{% static 'drapo2.png' %}" alt="" width="200" height="100" class="auto-height" style="margin-right: 50px;">                         
-<img src="{% static 'esp.jpg' %}" alt="" width="500" height="100" class="auto-height">
+<img src="{% static 'drapo.png' %}" alt="" width="300" height="100" class="auto-height" style="margin-right: 210px;">                         
+<img src="{% static 'drapo2.png' %}" alt="" width="200" height="100" class="auto-height" style="margin-right: 120px;">                         
+<img src="{% static 'esp.jpg' %}" alt="" width="400" height="100" class="auto-height">
 <p style = "text-align:center;"> 
     <h1  style="color: rgb(255, 0, 4); text-align:center;">Bienvenue sur notre site</h1>
     <h4 style="color: #0c0c0c; text-align:center;">Calcul de l’Indice National des Prix à la Consommation (INPC)</h4>
-    <a href="{% url 'famille_list' %}" class="btn btn-success mb-3">Entrer dans le projet</a>
-    
+    <button type="submit"><a href="{% url 'famille_list' %}" class="btn btn-success mb-3">Entrer dans le projet</a></button><br>
+    <br>
+    <button type="submit"><a href="{% url 'inpc' %}" class="btn btn-success"><i class="fas fa-layer-group"></i> INPC</a></button>
+
 </p>
 <p style = "text-align:center;"><img src="{% static 'face.jpg' %}"   width="50" height="60" class="auto-height"> ,</p>
 
-   <p style = "text-align:center;"> <a  href="https://web.facebook.com/ansade.rim" target="_blank">https://web.facebook.com/ansade.rim</a></p>
+   <p style = "text-align:center;"> <a  href="https://web.facebook.com/ansade.rim" target="_blank">Page facebook</a></p>
+   <p style = "text-align:center;"><img src="{% static 'logo.jpg' %}"   width="100" height="60" class="auto-height"> ,</p>
+
+   <p style = "text-align:center;"> <a   href="https://ansade.mr/fr/bulletin-trimestriel-de-conjoncture-t3-2022/#
+    " target="_blank">site ansade</a></p>
+
 {% endblock %}
 <!-- blog/templates/blog/article_detail.html -->
 
-https://ansade.mr/fr/bulletin-trimestriel-de-conjoncture-t3-2022/#
